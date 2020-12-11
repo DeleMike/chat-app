@@ -13,7 +13,7 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
   var _isLoading = false;
-  Future<void> _submitAuthForm(
+  void _submitAuthForm(
     String email,
     String password,
     String username,
@@ -44,7 +44,7 @@ class _AuthScreenState extends State<AuthScreen> {
           'email': email,
         });
       }
-    } on PlatformException catch (error) {
+    } on FirebaseException catch (error) {
       var msg = 'An error occured, please check your credentials';
       if (error.message != null) {
         msg = error.message;
