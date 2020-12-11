@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
   final Future<void> Function(
-          String email, String password, String username, bool isLoginMode,)
-      onSubmitFn;
-  AuthForm(this.onSubmitFn);
+    String email,
+    String password,
+    String username,
+    bool isLoginMode,
+    BuildContext context,
+  ) onSubmitFn;
+  final bool isLoading;
+  AuthForm(this.onSubmitFn, this.isLoading);
   @override
   _AuthFormState createState() => _AuthFormState();
 }
@@ -21,7 +26,9 @@ class _AuthFormState extends State<AuthForm> {
     FocusScope.of(context).unfocus();
     if (isValid) {
       _formKey.currentState.save();
-      widget.onSubmitFn(_userEmail, _userName, _userPassword, _isLoginMode,);
+      print('email = $_userEmail, password = $_userPassword, name= $_userName');
+      widget.onSubmitFn(_userEmail.trim(), _userName.trim(),
+          _userPassword.trim(), _isLoginMode, context);
       //send auth request to Firebase
     }
   }
@@ -92,21 +99,24 @@ class _AuthFormState extends State<AuthForm> {
                     obscureText: true,
                   ),
                   SizedBox(height: 12),
-                  RaisedButton(
-                    child: Text(_isLoginMode ? 'Login' : 'Signup'),
-                    onPressed: _trySubmit,
-                  ),
-                  FlatButton(
-                    child: Text(_isLoginMode
-                        ? 'Create new account'
-                        : 'I already have an account?'),
-                    onPressed: () {
-                      setState(() {
-                        _isLoginMode = !_isLoginMode;
-                      });
-                    },
-                    textColor: Theme.of(context).primaryColor,
-                  ),
+                  if (widget.isLoading) CircularProgressIndicator(),
+                  if (!widget.isLoading)
+                    RaisedButton(
+                      child: Text(_isLoginMode ? 'Login' : 'Signup'),
+                      onPressed: _trySubmit,
+                    ),
+                  if (!widget.isLoading)
+                    FlatButton(
+                      child: Text(_isLoginMode
+                          ? 'Create new account'
+                          : 'I already have an account?'),
+                      onPressed: () {
+                        setState(() {
+                          _isLoginMode = !_isLoginMode;
+                        });
+                      },
+                      textColor: Theme.of(context).primaryColor,
+                    ),
                 ],
               ),
             ),

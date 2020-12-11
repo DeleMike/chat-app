@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../widgets/auth/auth_form.dart';
 
@@ -11,15 +12,20 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final _auth = FirebaseAuth.instance;
+  var _isLoading = false;
   Future<void> _submitAuthForm(
     String email,
     String password,
     String username,
     bool isLoginMode,
+    BuildContext ctx,
   ) async {
     UserCredential authResult;
 
     try {
+      setState(() {
+        _isLoading = true;
+      });
       if (isLoginMode) {
         authResult = await _auth.signInWithEmailAndPassword(
           email: email,
@@ -30,18 +36,33 @@ class _AuthScreenState extends State<AuthScreen> {
           email: email,
           password: password,
         );
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(authResult.user.uid)
+            .set({
+          'username': username,
+          'email': email,
+        });
       }
     } on PlatformException catch (error) {
-        var msg = 'An error occured, please check your credentials';
-        if(error.message != null) {
-          msg = error.message;
-        } 
+      var msg = 'An error occured, please check your credentials';
+      if (error.message != null) {
+        msg = error.message;
+      }
 
-        Scaffold.of(context).showSnackBar(SnackBar(
+      Scaffold.of(ctx).showSnackBar(
+        SnackBar(
           content: Text(msg),
           backgroundColor: Theme.of(context).errorColor,
-        ),);
-    }catch (err){
+        ),
+      );
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (err) {
+      setState(() {
+        _isLoading = false;
+      });
       print(err);
     }
   }
@@ -51,7 +72,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       //appBar: AppBar(title: Text('')),
-      body: AuthForm(_submitAuthForm),
+      body: AuthForm(_submitAuthForm, _isLoading),
     );
   }
 }
