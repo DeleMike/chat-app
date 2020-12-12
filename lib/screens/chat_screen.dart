@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/chat/messages.dart';
+import '../widgets/chat/new_message.dart';
 
 class ChatScreen extends StatelessWidget {
   @override
@@ -18,20 +19,19 @@ class ChatScreen extends StatelessWidget {
             ),
             items: [
               DropdownMenuItem(
-                child: Container(
-                  child: Row(
-                    children: [
-                      Icon(Icons.exit_to_app),
-                      SizedBox(width: 8),
-                      Text('Logout'),
-                    ],
+                  child: Container(
+                    child: Row(
+                      children: [
+                        Icon(Icons.exit_to_app),
+                        SizedBox(width: 8),
+                        Text('Logout'),
+                      ],
+                    ),
                   ),
-                ),
-                value: 'logout'
-              )
+                  value: 'logout')
             ],
-            onChanged: (itemIdentifier){
-              if(itemIdentifier == 'logout'){
+            onChanged: (itemIdentifier) {
+              if (itemIdentifier == 'logout') {
                 FirebaseAuth.instance.signOut();
               }
             },
@@ -41,15 +41,8 @@ class ChatScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(child: Messages()),
+          NewMessage(),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          FirebaseFirestore.instance
-              .collection('chats/Ex46OnjPWwZZg7dloDxa/messages')
-              .add({'text': 'This was added by clicking FAB button'});
-        },
       ),
     );
   }
