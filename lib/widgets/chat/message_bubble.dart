@@ -9,6 +9,7 @@ class MessageBubble extends StatelessWidget {
   MessageBubble(this.message, this.userName, this.isMe, {this.key});
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     print('Key = $key');
     return Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -23,7 +24,7 @@ class MessageBubble extends StatelessWidget {
               bottomRight: !isMe ? Radius.circular(12) : Radius.circular(0),
             ),
           ),
-          width: 140,
+          width: mediaQuery.size.width * 0.7,
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
           margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
           child: Column(
