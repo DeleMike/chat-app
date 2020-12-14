@@ -79,6 +79,8 @@ class _AuthFormState extends State<AuthForm> {
                     ),
                   TextFormField(
                     key: ValueKey('email'),
+                    autocorrect: false,
+                    textCapitalization: TextCapitalization.none,
                     onSaved: (val) {
                       _userEmail = val;
                     },
@@ -96,6 +98,7 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   if (!_isLoginMode)
                     TextFormField(
+                      autocorrect: true,
                       key: ValueKey('name'),
                       onSaved: (val) {
                         _userName = val;

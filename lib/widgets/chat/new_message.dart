@@ -35,6 +35,9 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           Expanded(
             child: TextField(
+              autocorrect: true,
+              textCapitalization: TextCapitalization.sentences,
+              enableSuggestions: true,
               controller: _controller,
               keyboardType: TextInputType.multiline,
               maxLines: 2,
