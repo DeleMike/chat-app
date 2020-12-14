@@ -49,7 +49,8 @@ class _AuthScreenState extends State<AuthScreen> {
             .child('user_images')
             .child(authResult.user.uid + '.jpg');
 
-        await ref.putFile(image);
+        await ref.putFile(image); //upload to [user_images] folder
+        final imageUrl = await ref.getDownloadURL();
 
         //store user data
         await FirebaseFirestore.instance
@@ -58,6 +59,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .set({
           'username': username,
           'email': email,
+          'profile_pic' : imageUrl,
         });
       }
     } on FirebaseException catch (error) {
