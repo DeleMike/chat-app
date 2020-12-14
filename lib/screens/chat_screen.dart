@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/chat/messages.dart';
@@ -17,7 +16,7 @@ class ChatScreen extends StatelessWidget {
               Icons.more_vert,
               color: Theme.of(context).primaryIconTheme.color,
             ),
-            items: [
+           items: [
               DropdownMenuItem(
                   child: Container(
                     child: Row(

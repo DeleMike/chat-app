@@ -36,6 +36,7 @@ class _NewMessageState extends State<NewMessage> {
             child: TextField(
               controller: _controller,
               keyboardType: TextInputType.multiline,
+              maxLines: 2,
               decoration: InputDecoration(labelText: 'Send a message...'),
               onChanged: (value) {
                 setState(() {
