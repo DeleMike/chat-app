@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../pickers/user_image_picker.dart';
+
 class AuthForm extends StatefulWidget {
   final void Function(
     String email,
@@ -27,7 +29,8 @@ class _AuthFormState extends State<AuthForm> {
     if (isValid) {
       _formKey.currentState.save();
       print('email = $_userEmail, password = $_userPassword, name= $_userName');
-      widget.onSubmitFn(_userEmail.trim(),_userPassword.trim(), _userName == null ? null: _userName.trim(),_isLoginMode, context );
+      widget.onSubmitFn(_userEmail.trim(), _userPassword.trim(),
+          _userName == null ? null : _userName.trim(), _isLoginMode, context);
       //widget.onSubmitFn(_userEmail.trim(), _userPassword.trim(), _userName == null ? null: _userName.trim(),_isLoginMode, context);
       //send auth request to Firebase
     }
@@ -46,6 +49,10 @@ class _AuthFormState extends State<AuthForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (!_isLoginMode)
+                    UserImagePicker(
+                      key: ValueKey('user_image'),
+                    ),
                   TextFormField(
                     key: ValueKey('email'),
                     onSaved: (val) {

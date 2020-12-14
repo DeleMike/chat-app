@@ -23,16 +23,16 @@ class Messages extends StatelessWidget {
             );
           }
           final chatDocs = chatSnapshot.data.docs;
-          return  ListView.builder(
-              reverse: true,
-              itemCount: chatDocs.length,
-              itemBuilder: (ctx, index) => MessageBubble(
-                chatDocs[index]['text'],
-                chatDocs[index]['username'],
-                chatDocs[index]['userId'] == user.uid,
-                key: ValueKey(chatDocs[index].documentID),
-              ),
-            );
+          return ListView.builder(
+            reverse: true,
+            itemCount: chatDocs.length,
+            itemBuilder: (ctx, index) => MessageBubble(
+              chatDocs[index]['text'],
+              chatDocs[index]['username'],
+              chatDocs[index]['userId'] == user.uid,
+              key: ValueKey(chatDocs[index].documentID),
+            ),
+          );
         });
   }
 }
