@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../pickers/user_image_picker.dart';
@@ -7,6 +9,7 @@ class AuthForm extends StatefulWidget {
     String email,
     String password,
     String username,
+    File imageFile,
     bool isLoginMode,
     BuildContext context,
   ) onSubmitFn;
@@ -19,21 +22,41 @@ class AuthForm extends StatefulWidget {
 class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
   var _isLoginMode = true;
-  var _userEmail;
-  var _userName;
-  var _userPassword;
+  var _userEmail = '';
+  var _userName = '';
+  var _userPassword = '';
+  File _userImageFile;
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
+    if (_userImageFile == null && !_isLoginMode) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please pick an image.'),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+      return;
+    }
     if (isValid) {
       _formKey.currentState.save();
       print('email = $_userEmail, password = $_userPassword, name= $_userName');
-      widget.onSubmitFn(_userEmail.trim(), _userPassword.trim(),
-          _userName == null ? null : _userName.trim(), _isLoginMode, context);
+      widget.onSubmitFn(
+        _userEmail.trim(),
+        _userPassword.trim(),
+        _userName == null ? null : _userName.trim(),
+        _userImageFile,
+        _isLoginMode,
+        context,
+      );
       //widget.onSubmitFn(_userEmail.trim(), _userPassword.trim(), _userName == null ? null: _userName.trim(),_isLoginMode, context);
       //send auth request to Firebase
     }
+  }
+
+  void _pickedImage(File image) {
+    _userImageFile = image;
   }
 
   @override
@@ -51,6 +74,7 @@ class _AuthFormState extends State<AuthForm> {
                 children: [
                   if (!_isLoginMode)
                     UserImagePicker(
+                      _pickedImage,
                       key: ValueKey('user_image'),
                     ),
                   TextFormField(
