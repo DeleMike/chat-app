@@ -11,14 +11,28 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
   @override
   void initState() {
+    super.initState();
     final fbm = FirebaseMessaging();
     fbm.requestNotificationPermissions();
-    fbm.configure();
-    super.initState();
+    fbm.configure(
+      onMessage: (msg) {
+        print('onMessage: $msg');
+        return;
+      },
+      onLaunch: (msg) {
+        print('onLaunch: $msg');
+        return;
+      },
+      onResume: (msg) {
+        print('onResume: $msg');
+        return;
+      },
+    );
+    
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Text('Chat App'),
         actions: [
           DropdownButton(
+            underline: Container(),
             icon: Icon(
               Icons.more_vert,
               color: Theme.of(context).primaryIconTheme.color,
